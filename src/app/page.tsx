@@ -1,34 +1,34 @@
 import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 
 export default async function HomePage() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
-  const {
-    data,
-    error,
-  } = await supabase
+  const { data, error } = await supabase
     .from("todos")
     .select("*");
 
   console.log(data);
 
   return (
-    <main className="p-10">
-      <h1 className="text-4xl font-bold">
-        ManoLocal
+    <main className="min-h-screen p-10">
+      <h1 className="text-5xl font-bold mb-6 text-[#8B6B4A]">
+        Manolocal
       </h1>
 
-      <p className="mt-4">
-        Supabase conectado correctamente.
+      <p className="text-lg mb-10">
+        Plataforma de servicios locales
       </p>
 
-      {error && (
-        <p className="text-red-500 mt-4">
-          Error: {error.message}
-        </p>
-      )}
+      <div className="space-y-4">
+        {data?.map((todo) => (
+          <div
+            key={todo.id}
+            className="border p-4 rounded"
+          >
+            {todo.name}
+          </div>
+        ))}
+      </div>
     </main>
   );
 }
